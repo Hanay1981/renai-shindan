@@ -168,7 +168,7 @@ body::before{content:'';position:fixed;inset:0;
   <div class="axis-box">
     <h4>受け取れるもの</h4>
     <div class="axis-list">
-      <div class="axis-row"><span class="axis-tag" style="background:rgba(232,122,154,.18);color:#E87A9A">結果</span><span>54通りのうち、あなたに当てはまるタイプ1つ</span></div>
+      <div class="axis-row"><span class="axis-tag" style="background:rgba(232,122,154,.18);color:#E87A9A">結果</span><span>安心とときめき、6つの要素から導く、あなたの恋愛対象タイプ</span></div>
       <div class="axis-row"><span class="axis-tag" style="background:rgba(232,122,154,.18);color:#E87A9A">行動</span><span>今日から試せる具体的な手順3つ（いちばん落ちている1か所だけ）</span></div>
       <div class="axis-row"><span class="axis-tag" style="background:rgba(232,122,154,.18);color:#E87A9A">場面</span><span>出会ったばかり／友人から一歩進むとき／付き合ってから の3場面での見え方</span></div>
     </div>
@@ -184,7 +184,8 @@ body::before{content:'';position:fixed;inset:0;
   </div>
 
   <div class="intro-body">
-    <p>いま気になる人がいてもいなくても大丈夫です。直近の、恋愛や好意が関わった場面を思い浮かべて、ふだんの自分として答えてください。</p>
+    <p>いま気になる人がいてもいなくても大丈夫です。直近の、恋愛や好意が関わった場面を思い浮かべて、ふだんの自分として答えてください。<strong style="color:#c8d4e6">パートナーがいる方は、その人との関係を思い浮かべて</strong>答えてください。</p>
+    <p>性別や、恋愛の対象になる相手の性別に関係なく答えられます。なお、いま恋愛をしたいと思っていない方には、結果の中に当てはまらない部分があるかもしれません。</p>
     <p>選ぶと自動で次の設問に進みます。「← 前の質問」で戻れます。</p>
   </div>
 
@@ -474,7 +475,7 @@ function showResult(){
   const key=getKey(sc.pct);
   const t=TYPES[key];
   let low=lowestSub(sc.sub), high=highestSub(sc.sub);
-  const flat = sc.sub[low]===sc.sub[high];
+  const flat = (sc.sub[high]-sc.sub[low]) < 10; // 差が10点未満＝目立った弱点・強みなし
   const rel=calcReliability(ans);
   const r=sc.pct.S, o=sc.pct.A;
 
@@ -521,6 +522,26 @@ function showResult(){
    + '<div class="score-note">'+(o>=65?'恋愛の相手として意識される材料が、はっきり出ています。':o>=40?'出てはいますが、場面によってムラがあります。':'「いい人」の先に進むための材料が、まだ外に出ていません。')+'</div></div>'
    + '</div>';
 
+  // 境目に近いときの注記
+  (function(){
+    function nb(v){ // 境目から±5点以内なら、隣の帯を返す
+      if(Math.abs(v-65)<=5) return v>=65?'M':'H';
+      if(Math.abs(v-40)<=5) return v>=40?'L':'M';
+      return null;
+    }
+    const alt=[];
+    const bs=band(r), ba=band(o), ns=nb(r), na=nb(o);
+    if(ns) alt.push({ax:'安心', v:r, key:ns+ba});
+    if(na) alt.push({ax:'ときめき', v:o, key:bs+na});
+    if(alt.length){
+      h+='<div class="rel-box" style="border-color:rgba(255,217,160,.35)"><div class="rel-top"><span class="rel-label">境目に近い結果です</span></div><div class="rel-note">';
+      alt.forEach(function(x){
+        h+='<strong style="color:#c8d4e6">'+x.ax+'（'+x.v+'点）</strong>が、タイプの境目のすぐ近くにあります。答え方が少し違えば「<strong style="color:#c8d4e6">'+TYPES[x.key].name+'</strong>」になっていた可能性があります。<br>';
+      });
+      h+='どちらのタイプの説明にも、思い当たるところがあるかもしれません。少し時間をおいてもう一度受けると、傾向がはっきりします。</div></div>';
+    }
+  })();
+
   h+='<div class="sec"><div class="sec-label">6つの内訳 — どこで落ちているか</div><div class="sub-list">';
   SUB_ORDER.forEach(function(k){
     const s=SUB[k], v=sc.sub[k], col=AX[s.ax].color;
@@ -551,12 +572,12 @@ function showResult(){
   h+='</div></div>';
 
   h+='<div class="sec"><div class="sec-label">いま効いているもの</div><div class="sec-body">'
-   + (flat ? '6つの要素がすべて同じ高さでした。突出も欠けもない状態です。まずはどれか一つを選んで伸ばすと、見え方に輪郭が出ます。' : STRENGTH[high])
+   + (flat ? '6つの要素が、ほぼ同じ高さにそろっています（いちばん高い要素と低い要素の差が10点未満）。突出も欠けもない状態です。まずはどれか一つを選んで伸ばすと、見え方に輪郭が出ます。' : STRENGTH[high])
    + '</div></div>';
 
   const rx=RX[low];
-  h+='<div class="sec" style="border-color:rgba(232,122,154,.28)"><div class="sec-label">次の一歩 — 直す場所は「'+rx.label+'」ひとつです</div>'
-   + '<div class="sec-body" style="margin-bottom:1.1rem">'+(flat?'6つとも同じ高さでしたので、まずは<strong>'+rx.label+'</strong>から動かしてみてください。':'6つのうち、いちばん出ていないのが<strong>'+rx.label+'</strong>（'+sc.sub[low]+'点）でした。')+'全部を変える必要はありません。ここだけ動かせば、2軸のスコアは連動して上がります。</div>'
+  h+='<div class="sec" style="border-color:rgba(232,122,154,.28)"><div class="sec-label">'+(flat?'次の一歩 — 目立った弱点はありません':'次の一歩 — 直す場所は「'+rx.label+'」ひとつです')+'</div>'
+   + '<div class="sec-body" style="margin-bottom:1.1rem">'+(flat?'6つの差が小さく、はっきりした弱点はありませんでした。あえて一つ選ぶなら、いちばん点が低かった<strong>'+rx.label+'</strong>（'+sc.sub[low]+'点）から動かしてみてください。':'6つのうち、いちばん出ていないのが<strong>'+rx.label+'</strong>（'+sc.sub[low]+'点）でした。')+'全部を変える必要はありません。ここだけ動かせば、2軸のスコアは連動して上がります。</div>'
    + '<div class="step">';
   rx.steps.forEach(function(s,i){ h+='<div class="step-row"><div class="step-num" style="background:rgba(111,183,232,.15);color:#6FB7E8">'+(i+1)+'</div><div class="step-txt"><b>'+s[0]+'</b>'+s[1]+'</div></div>'; });
   h+='</div></div>';

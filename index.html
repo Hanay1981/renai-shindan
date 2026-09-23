@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>恋愛対象か、いい人止まりか診断 | ジブンwoカシカ</title>
+<meta name="description" content="いい人なのに、恋愛対象にならない？ 心理学の「理想の相手の3次元」と「選択的な好意」の研究をもとに、安心×ときめきの2軸で20問・3分で可視化します。"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#05080f;--surface:#0a0f1a;--surface2:#101725;
+  --border:rgba(120,180,255,0.09);--border2:rgba(120,180,255,0.18);
+  --text:#e6edf8;--muted:#5a6a85;--faint:#141c2b;
+  --warm:#E8734A;--warm2:#B94E2C;--cool:#4AA8E8;--cool2:#2C72B9;--cream:#FFD9A0;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;-webkit-text-size-adjust:100%}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 50% 40% at 78% 12%,rgba(232,115,74,0.07),transparent),
+             radial-gradient(ellipse 45% 50% at 12% 88%,rgba(74,168,232,0.06),transparent);
+  pointer-events:none;z-index:0}
+.app{max-width:600px;margin:0 auto;padding:0 1.2rem 5rem;position:relative;z-index:1}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+.fade-in{animation:fadeUp .5s cubic-bezier(.22,.68,0,1.1) forwards}
+
+/* TOP */
+.top{padding:3.2rem 0 2rem}
+.top-eye{font-size:.64rem;letter-spacing:.24em;color:var(--muted);margin-bottom:1rem;text-transform:uppercase;text-align:center}
+.top h1{font-size:1.5rem;font-weight:700;line-height:1.55;color:#fff;margin-bottom:.7rem;text-align:center;letter-spacing:.02em}
+.top-sub{font-size:.66rem;letter-spacing:.16em;color:var(--muted);margin-bottom:2.2rem;text-align:center}
+.intro-body{font-size:.87rem;line-height:2.05;color:#93a3bd;margin-bottom:1.5rem}
+.intro-body p{margin-bottom:.95rem}
+.intro-body em{color:var(--warm);font-style:normal;font-weight:500}
+.hook{border-left:2px solid var(--warm2);padding-left:1.2rem;margin:1.3rem 0;font-size:.87rem;line-height:1.95;color:#b3c0d6}
+.axis-box{background:var(--surface);border:.5px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1.4rem}
+.axis-box h4{font-size:.67rem;color:var(--muted);letter-spacing:.12em;margin-bottom:.9rem}
+.axis-list{display:flex;flex-direction:column;gap:.6rem}
+.axis-row{display:flex;align-items:flex-start;gap:.8rem;font-size:.8rem;line-height:1.75;color:#8494ae}
+.axis-tag{font-size:.65rem;font-weight:700;padding:2px 9px;border-radius:20px;flex-shrink:0;margin-top:2px;white-space:nowrap}
+.warn-box{background:rgba(232,115,74,.05);border:.5px solid rgba(232,115,74,.18);border-radius:10px;padding:.9rem 1.1rem;margin-bottom:1.5rem;font-size:.78rem;color:#8494ae;line-height:1.85}
+.btn-start{width:100%;padding:1.05rem;font-size:.98rem;font-weight:700;letter-spacing:.08em;border-radius:12px;border:none;background:linear-gradient(135deg,var(--warm),var(--warm2));color:#fff;cursor:pointer;transition:.25s;font-family:'Noto Sans JP',sans-serif}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(232,115,74,.3)}
+
+/* QUIZ */
+.quiz-wrap{padding-top:2.2rem}
+.prog-wrap{margin-bottom:1.6rem}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.55rem}
+.axis-pill{font-size:.66rem;font-weight:700;padding:3px 11px;border-radius:20px;letter-spacing:.06em}
+.q-cnt{font-size:.7rem;color:var(--muted)}
+.prog-bar{height:2.5px;background:var(--faint);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--warm2),var(--warm),var(--cream));border-radius:2px;transition:width .4s ease}
+.basis-note{font-size:.63rem;color:var(--muted);text-align:right;margin-top:.45rem;letter-spacing:.05em}
+.q-card{background:var(--surface);border:.5px solid var(--border);border-radius:14px;padding:1.5rem 1.4rem;margin-bottom:1.2rem}
+.q-text{font-size:.97rem;line-height:1.85;color:#fff;font-weight:500}
+.opts{display:flex;flex-direction:column;gap:.5rem}
+.opt-btn{width:100%;padding:.82rem 1rem;font-size:.85rem;font-family:'Noto Sans JP',sans-serif;border:.5px solid var(--border);border-radius:9px;background:var(--surface);color:#8494ae;cursor:pointer;text-align:left;transition:.18s}
+.opt-btn:hover{border-color:var(--border2);color:var(--text);background:var(--surface2)}
+.opt-btn.selected{border-color:var(--warm);color:#fff;background:rgba(232,115,74,.12)}
+.nav-row{display:flex;justify-content:flex-start;margin-top:1.2rem}
+.btn-prev{padding:.6rem 1.1rem;font-size:.76rem;font-family:'Noto Sans JP',sans-serif;border:.5px solid var(--border);border-radius:8px;background:transparent;color:var(--muted);cursor:pointer}
+.btn-prev:hover{color:var(--text);border-color:var(--border2)}
+
+/* LOADING */
+.loading{padding:6rem 0;text-align:center}
+.spinner{width:34px;height:34px;border:2px solid var(--faint);border-top-color:var(--warm);border-radius:50%;margin:0 auto 1.4rem;animation:spin .9s linear infinite}
+.loading p{font-size:.8rem;color:var(--muted);letter-spacing:.1em;animation:pulse 1.6s ease-in-out infinite}
+
+/* RESULT */
+.result-wrap{padding-top:2.2rem}
+.result-header{text-align:center;padding:2rem 1.2rem 2.2rem;background:var(--surface);border:.5px solid var(--border);border-radius:16px;margin-bottom:1.2rem}
+.result-label{font-size:.63rem;letter-spacing:.24em;color:var(--muted);margin-bottom:1rem}
+.result-type{font-size:1.45rem;font-weight:700;line-height:1.5;margin-bottom:.5rem}
+.result-one{font-size:.85rem;color:#93a3bd;line-height:1.9;margin-top:.9rem}
+
+/* MAP */
+.map-wrap{background:var(--surface);border:.5px solid var(--border);border-radius:14px;padding:1.4rem 1.2rem 1.1rem;margin-bottom:1.2rem}
+.map{position:relative;width:100%;max-width:300px;aspect-ratio:1;margin:0 auto;border-radius:10px;background:var(--faint);overflow:hidden}
+.map-q{position:absolute;display:flex;align-items:center;justify-content:center;font-size:.58rem;color:#44536b;text-align:center;line-height:1.45;padding:3px;pointer-events:none}
+.map-line{position:absolute;background:rgba(120,180,255,.13)}
+.map-dot{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--warm);box-shadow:0 0 0 4px rgba(232,115,74,.22);transform:translate(-50%,50%);transition:.6s cubic-bezier(.22,.68,0,1.1)}
+.map-axis-x,.map-axis-y{font-size:.62rem;color:var(--muted);text-align:center;letter-spacing:.08em}
+.map-axis-x{margin-top:.7rem}
+.map-axis-y{margin-bottom:.6rem}
+
+/* SCORES */
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.2rem}
+.score-card{background:var(--surface);border:.5px solid var(--border);border-radius:12px;padding:1.1rem}
+.score-name{font-size:.72rem;color:var(--muted);margin-bottom:.5rem;letter-spacing:.06em}
+.score-val{font-size:1.7rem;font-weight:300;line-height:1}
+.score-unit{font-size:.7rem;color:var(--muted);margin-left:.2rem}
+.score-bar{height:3px;background:var(--faint);border-radius:2px;overflow:hidden;margin-top:.7rem}
+.score-fill{height:100%;border-radius:2px;transition:width .8s ease}
+.score-note{font-size:.68rem;color:var(--muted);margin-top:.55rem;line-height:1.6}
+
+/* SECTIONS */
+.sec{background:var(--surface);border:.5px solid var(--border);border-radius:14px;padding:1.4rem;margin-bottom:1rem}
+.sec-label{font-size:.63rem;letter-spacing:.2em;color:var(--muted);margin-bottom:.9rem}
+.sec-body{font-size:.86rem;line-height:2.05;color:#93a3bd}
+.sec-body strong{color:var(--text);font-weight:500}
+.scene{display:flex;flex-direction:column;gap:.7rem}
+.scene-row{display:flex;gap:.75rem;align-items:flex-start;font-size:.84rem;line-height:1.8;color:#93a3bd}
+.scene-mark{color:var(--warm);flex-shrink:0;font-size:.7rem;margin-top:.45rem}
+.step{counter-reset:s;display:flex;flex-direction:column;gap:1rem}
+.step-row{display:flex;gap:.9rem;align-items:flex-start}
+.step-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:rgba(232,115,74,.15);color:var(--warm);font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.step-txt{font-size:.85rem;line-height:1.9;color:#93a3bd}
+.step-txt b{display:block;color:var(--text);font-weight:500;margin-bottom:.15rem}
+
+/* RELIABILITY */
+.rel-box{background:var(--surface);border:.5px solid var(--border);border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:1rem}
+.rel-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
+.rel-label{font-size:.66rem;letter-spacing:.14em;color:var(--muted)}
+.rel-badge{font-size:.72rem;font-weight:700;padding:3px 12px;border-radius:20px}
+.rel-note{font-size:.72rem;line-height:1.8;color:var(--muted)}
+
+.src{background:var(--surface);border:.5px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1rem}
+.src p{font-size:.75rem;color:var(--muted);line-height:1.95}
+.btn-retry{width:100%;padding:.9rem;font-size:.82rem;font-family:'Noto Sans JP',sans-serif;border:.5px solid var(--border);border-radius:10px;background:transparent;color:var(--muted);cursor:pointer;margin-top:.4rem}
+.btn-retry:hover{color:var(--text);border-color:var(--border2)}
+.quote{font-size:1.02rem;line-height:1.85;color:#fff;font-weight:500;padding:1rem 1.1rem;background:rgba(232,115,74,.08);border-radius:10px;border-left:2px solid var(--warm)}
+.micro{font-size:.68rem;line-height:1.75;color:var(--muted);margin-top:.9rem}
+.micro strong{color:#93a3bd;font-weight:500}
+.sub-list{display:flex;flex-direction:column;gap:1.05rem}
+.sub-row{}
+.sub-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.45rem}
+.sub-name{font-size:.86rem;color:var(--text);font-weight:500}
+.sub-ax{font-size:.64rem;letter-spacing:.06em;margin-right:.55rem;font-weight:700}
+.sub-val{font-size:1.05rem;font-weight:300}
+.sub-bar{height:3px;background:var(--faint);border-radius:2px;overflow:hidden}
+.sub-fill{height:100%;border-radius:2px;transition:width .8s ease}
+.sub-desc{font-size:.72rem;color:var(--muted);line-height:1.7;margin-top:.45rem}
+.sub-flag{display:inline-block;font-size:.63rem;font-weight:700;padding:1px 8px;border-radius:20px;margin-left:.5rem;white-space:nowrap}
+.sub-flag.low{background:rgba(232,115,74,.18);color:#E8734A}
+.sub-flag.high{background:rgba(94,203,138,.16);color:#5ECB8A}
+@media(max-width:400px){.score-grid{grid-template-columns:1fr}.top h1{font-size:1.32rem}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- TOP -->
+<section id="topPage" class="fade-in">
+  <div class="top">
+    <div class="top-eye">AI × PSYCHOLOGY</div>
+    <h1>恋愛対象か、<br>いい人止まりか診断</h1>
+    <div class="top-sub">安心 × ときめき ／ 全20問 ／ 約3分</div>
+  </div>
+
+  <div class="warn-box">
+    <strong style="color:#c8d4e6">はじめる前に、3つだけ。</strong><br>
+    ・答えるのはご自身の主観なので、結果には幅が出ます。<br>
+    ・これは「あなたに魅力があるかどうか」ではなく「恋愛の相手として意識されやすい行動が出ているか」の目安です。<br>
+    ・受け取り方を決めるのは、いつもご本人です。
+  </div>
+
+  <div class="axis-box">
+    <h4>この診断でわかること</h4>
+    <div class="axis-list">
+      <div class="axis-row"><span class="axis-tag" style="background:rgba(111,183,232,.18);color:#6FB7E8">01</span><span>あなたが「安心できる人」と「ときめく人」のどちらとして見られやすいか</span></div>
+      <div class="axis-row"><span class="axis-tag" style="background:rgba(111,183,232,.18);color:#6FB7E8">02</span><span>「いい人」で止まってしまうとき、何が足りていないのか</span></div>
+      <div class="axis-row"><span class="axis-tag" style="background:rgba(111,183,232,.18);color:#6FB7E8">03</span><span>6つの要素のうち、いま相手に届いていないのはどこか</span></div>
+    </div>
+  </div>
+
+  <div class="axis-box">
+    <h4>受け取れるもの</h4>
+    <div class="axis-list">
+      <div class="axis-row"><span class="axis-tag" style="background:rgba(232,122,154,.18);color:#E87A9A">結果</span><span>54通りのうち、あなたに当てはまるタイプ1つ</span></div>
+      <div class="axis-row"><span class="axis-tag" style="background:rgba(232,122,154,.18);color:#E87A9A">行動</span><span>今日から試せる具体的な手順3つ（いちばん落ちている1か所だけ）</span></div>
+      <div class="axis-row"><span class="axis-tag" style="background:rgba(232,122,154,.18);color:#E87A9A">場面</span><span>出会ったばかり／友人から一歩進むとき／付き合ってから の3場面での見え方</span></div>
+    </div>
+  </div>
+
+  <div class="axis-box">
+    <h4>その結果、こうなります</h4>
+    <div class="axis-list">
+      <div class="axis-row"><span class="axis-tag" style="background:rgba(255,217,160,.18);color:#FFD9A0">→</span><span>「いい人なのに選ばれない」理由を、性格ではなく行動の偏りとして見られるようになります</span></div>
+      <div class="axis-row"><span class="axis-tag" style="background:rgba(255,217,160,.18);color:#FFD9A0">→</span><span>自分を変えるのではなく、足りない方を一つ足す、という具体的な手が打てます</span></div>
+      <div class="axis-row"><span class="axis-tag" style="background:rgba(255,217,160,.18);color:#FFD9A0">→</span><span>相手の「いい人だよね」という言葉の意味が、いまより正確に読めるようになります</span></div>
+    </div>
+  </div>
+
+  <div class="intro-body">
+    <p>いま気になる人がいてもいなくても大丈夫です。直近の、恋愛や好意が関わった場面を思い浮かべて、ふだんの自分として答えてください。</p>
+    <p>選ぶと自動で次の設問に進みます。「← 前の質問」で戻れます。</p>
+  </div>
+
+  <button class="btn-start" onclick="startQuiz()">診断をはじめる</button>
+</section>
+
+<!-- QUIZ -->
+<section id="quizPage" style="display:none">
+  <div class="quiz-wrap">
+    <div class="prog-wrap">
+      <div class="prog-top">
+        <span class="axis-pill" id="axisPill"></span>
+        <span class="q-cnt" id="qCnt"></span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+      <div class="basis-note" id="basisNote"></div>
+    </div>
+    <div class="q-card"><div class="q-text" id="qText"></div></div>
+    <div class="opts" id="opts"></div>
+    <div class="nav-row"><button class="btn-prev" id="btnPrev" onclick="prevQ()">← 前の質問</button></div>
+  </div>
+</section>
+
+<!-- LOADING -->
+<section id="loadingPage" style="display:none">
+  <div class="loading">
+    <div class="spinner"></div>
+    <p>2軸と6要素を計算しています…</p>
+  </div>
+</section>
+
+<!-- RESULT -->
+<section id="resultPage" style="display:none">
+  <div class="result-wrap" id="resultBody"></div>
+</section>
+
+</div>
+<script>
+// ══ 設問 ══ rev:true = 逆転項目
+// ax: S=安心 / A=ときめき   sub: 下位要素（この診断での内訳）
+const QS=[
+ {id:1, ax:'S', sub:'T', basis:'温かさ・信頼性（Warmth–Trustworthiness）', rev:false, q:'連絡すると約束したら、その日のうちにきちんと返すほうだ'},
+ {id:2, ax:'A', sub:'J', basis:'自己主張', rev:false, q:'行きたい店やしたいことを、自分から提案することが多い'},
+ {id:3, ax:'S', sub:'K', basis:'温かさ・信頼性（気遣い）', rev:false, q:'相手の元気がないと、言われる前に気づくほうだ'},
+ {id:4, ax:'A', sub:'X', basis:'選択的な好意（Selective desire）', rev:false, q:'気になる人には、ほかの人とは違う接し方をしている自覚がある'},
+ {id:5, ax:'S', sub:'E', basis:'情緒の安定（逆転）', rev:true, q:'機嫌が悪いと、それが態度や返信に出やすい'},
+ {id:6, ax:'A', sub:'V', basis:'活力・魅力（Vitality–Attractiveness）', rev:false, q:'自分の好きなことを話すと、つい熱が入る'},
+ {id:7, ax:'S', sub:'T', basis:'温かさ・信頼性（一貫性）', rev:false, q:'言っていることとやっていることが、ずれないようにしている'},
+ {id:8, ax:'A', sub:'J', basis:'自己主張（逆転）', rev:true, q:'「どっちでもいいよ」「合わせるよ」と言うことが多い'},
+ {id:9, ax:'S', sub:'K', basis:'温かさ・信頼性（配慮行動）', rev:false, q:'相手が困っていそうなことを察して、先に動くことがある'},
+ {id:10,ax:'A', sub:'X', basis:'選択的な好意（逆転）', rev:true, q:'誰に対しても、同じように優しくしている'},
+ {id:11,ax:'S', sub:'E', basis:'情緒の安定', rev:false, q:'意見が合わないときも、感情的にならずに話せる'},
+ {id:12,ax:'A', sub:'V', basis:'活力・魅力（自己投資）', rev:false, q:'見た目や服装に、自分なりに手をかけている'},
+ {id:13,ax:'S', sub:'T', basis:'温かさ・信頼性（逆転）', rev:true, q:'ドタキャンや遅刻をしてしまうことがある'},
+ {id:14,ax:'A', sub:'J', basis:'自己主張', rev:false, q:'相手と違う意見でも、はっきり伝えることがある'},
+ {id:15,ax:'S', sub:'K', basis:'温かさ・信頼性（逆転）', rev:true, q:'気づくと、相手の話より自分の話のほうが多くなっている'},
+ {id:16,ax:'A', sub:'X', basis:'選択的な好意（好意の表明）', rev:false, q:'「あなたと話すのが楽しい」など、好意を言葉にして伝えられる'},
+ {id:17,ax:'S', sub:'E', basis:'情緒の安定', rev:false, q:'「一緒にいると落ち着く」と言われたことがある'},
+ {id:18,ax:'A', sub:'V', basis:'活力・魅力（逆転）', rev:true, q:'休日は特にやりたいこともなく、なんとなく過ぎていくことが多い'},
+ {id:19,ax:'S', sub:'T', basis:'温かさ・信頼性（守秘）', rev:false, q:'打ち明けられた話を、ほかの人に話さない'},
+ {id:20,ax:'A', sub:'X', basis:'選択的な好意（逆転）', rev:true, q:'好きな人の前でも、気持ちがばれないよう、ほかの人と同じように振る舞う'}
+];
+
+const OPTS=['まったく当てはまらない','あまり当てはまらない','どちらとも言えない','やや当てはまる','とても当てはまる'];
+
+const AX={
+  S:{name:'安心', color:'#6FB7E8', bg:'rgba(111,183,232,.18)'},
+  A:{name:'ときめき', color:'#E87A9A', bg:'rgba(232,122,154,.18)'}
+};
+
+// 下位要素（この診断での内訳。確立された下位尺度ではありません）
+const SUB={
+  T:{ax:'S', name:'誠実', desc:'信用できるか。約束を守る、言動がずれない、打ち明け話を守る。'},
+  K:{ax:'S', name:'気遣い', desc:'相手を見ているか。元気のなさに気づく、先に動く、自分の話ばかりにしない。'},
+  E:{ax:'S', name:'安定', desc:'振り回さないか。機嫌を態度に出さない、感情的にならない、一緒にいて落ち着く。'},
+  J:{ax:'A', name:'主張', desc:'「自分」があるか。提案する、違う意見を言う、「どっちでもいい」で済ませない。'},
+  X:{ax:'A', name:'特別扱い', desc:'好意が「その人だけ」に向いているか。接し方を変える、言葉にする、みんなと同じにしない。'},
+  V:{ax:'A', name:'生気', desc:'生き生きして見えるか。好きなことに熱がある、自分に手をかける、日々に中身がある。'}
+};
+
+// ══ 9タイプ（安心3帯 × ときめき3帯）══
+const TYPES={
+ HH:{name:'恋愛対象として選ばれる人', color:'#F0A8C0',
+  one:'安心も、ときめきも、行動として出ています。「一緒にいて落ち着く」と「ちょっと気になる」を同時に渡せている状態です。',
+  guess:'「この人となら、ちゃんと付き合えそう」',
+  guessWhy:'安心だけだと友だち、ときめきだけだと不安、になりがちです。両方がそろうと、相手は「恋愛として考えてもいい相手」に分類します。選ばれやすいのはこの位置です。',
+  scene:['「なんで付き合ってないの？」と周りに言われたことがある','好意を向けられても、あまり困らずに受け止められる','気づくと、相手のほうから誘ってくれている']},
+ HM:{name:'大切にされる人', color:'#B8D8F0',
+  one:'安心は十分に届いています。ときめきも出てはいますが、相手が「恋愛」と確信するところまでは届き切っていません。',
+  guess:'「すごくいい人。……好き、なのかな？」',
+  guessWhy:'安心が先に満たされると、相手は居心地のよさを感じます。そこにもう一段ときめきの材料が乗ると、「いい人」から「気になる人」に切り替わります。あと一歩の位置です。',
+  scene:['相談される、頼られる、でも告白はされない','仲はいいのに、決定的な何かが起きない','二人きりになっても、友だちの延長のような空気になる']},
+ HL:{name:'いい人止まりになりやすい人', color:'#6FB7E8',
+  one:'安心は満点に近いのに、ときめきの材料がほとんど出ていません。「いい人」として大切にされるほど、恋愛からは遠ざかる位置です。',
+  guess:'「いい人なんだけどね。……恋愛って感じじゃないかな」',
+  guessWhy:'優しさがみんなに同じように配られていると、それは好意ではなく「性格」として受け取られます。誰にでも優しい人は、誰にとっても特別ではない、という見え方になります。あなたに魅力がないのではなく、「あなたにだけ」の情報が出ていないのです。',
+  scene:['「いい人だよね」と言われるが、その先がない','相談役になりやすく、恋愛相談をされることすらある','好きな人ができても、気持ちを隠してふつうに振る舞ってしまう']},
+ MH:{name:'惹かれるけれど、不安にさせる人', color:'#F08CA8',
+  one:'ときめきは強く出ています。安心がまだ届き切っておらず、相手は惹かれながらも「この人で大丈夫かな」を測っています。',
+  guess:'「気になる。……でも、振り回されそうでちょっと怖い」',
+  guessWhy:'ときめきは入口を開けますが、関係を続けるかどうかは安心で決まります。惹かれる理由と、踏み込めない理由が同時にある状態です。',
+  scene:['出会ってすぐは盛り上がるのに、続きにくい','「何を考えてるかわからない」と言われたことがある','相手の反応を見て、自分でも押しすぎたかなと思うことがある']},
+ MM:{name:'悪くないけれど、決め手がない人', color:'#93a3bd',
+  one:'2軸とも中間です。嫌われる理由はないかわりに、選ばれる理由もまだはっきりしていません。',
+  guess:'「感じはいい。でも、この人じゃなきゃ、ってほどではないかな」',
+  guessWhy:'恋愛の相手に選ばれるには、どちらかが突き抜けている必要があります。両方が中間だと、比べられたときに記憶に残りにくくなります。',
+  scene:['デートまでは行くが、2回目以降につながりにくい','「いい人いないの？」と聞かれて、答えに困る','好意を持たれても、自分で気づかないことがある']},
+ ML:{name:'安心はあるが、印象が残りにくい人', color:'#A8B8CC',
+  one:'安心は中間、ときめきはほとんど出ていません。穏やかな人として見られていますが、恋愛の候補には入りにくい位置です。',
+  guess:'「感じのいい人だったな。……名前、なんだっけ」',
+  guessWhy:'ときめきは「この人のことをもっと知りたい」という関心の入口です。そこが閉じていると、関係は礼儀正しいまま止まります。',
+  scene:['知り合いは多いが、特別な関係にはなりにくい','自分からはあまり誘わない','好きなことを聞かれても、すぐに答えが出てこない']},
+ LH:{name:'追いかけられるけれど、続かない人', color:'#E87A9A',
+  one:'ときめきは十分にあるのに、安心がほとんど出ていません。惹きつけるのは得意でも、相手が長く居られる場所になりにくい状態です。',
+  guess:'「一緒にいると楽しい。……けど、付き合うのは疲れそう」',
+  guessWhy:'ときめきだけが強いと、相手は緊張と期待のあいだを行き来し続けます。それは刺激的ですが、長くは続けられません。安心の材料が一つ入るだけで、関係の寿命は大きく変わります。',
+  scene:['好意を持たれることは多いのに、関係が長続きしない','約束の時間や連絡で、相手をがっかりさせたことがある','気分が表に出て、相手に気を遣わせてしまうことがある']},
+ LM:{name:'距離感が読まれにくい人', color:'#C8A0B0',
+  one:'安心が届いておらず、ときめきも決め手になるほどは出ていません。相手はあなたにどう近づけばいいか、判断がつきにくい状態です。',
+  guess:'「どういうつもりなんだろう……」',
+  guessWhy:'安心もときめきも中途半端だと、相手は近づく理由も惹かれる理由も持てません。多くは誤解ですが、情報が少ないと誤解は解けません。',
+  scene:['好意を持っても、相手に伝わっていないことが多い','連絡の頻度やタイミングが、相手と合わないことがある','自分でも、恋愛になると何が正解かわからなくなる']},
+ LL:{name:'恋愛の入口に、まだ立っていない人', color:'#B4A07B',
+  one:'安心もときめきも、低いのではなく「出ていない」状態です。相手はあなたを恋愛の相手として考える材料を、まだ受け取っていません。',
+  guess:'「……まだ、よくわからない人かな」',
+  guessWhy:'これは魅力の評価ではありません。安心の材料も、ときめきの材料も、外にほとんど出ていないため、相手は判断できずに保留しています。どちらか一つを出すだけで、見え方ははっきり変わります。',
+  scene:['恋愛の話になると、どこか他人事のように感じる','好意を向けられても、どうしていいかわからない','今はそもそも、恋愛にあまりエネルギーを使えていない']}
+};
+
+// ══ 強み（最も高い下位要素で出し分け）══
+const STRENGTH={
+ T:'あなたの強みは<strong>誠実</strong>です。約束を守り、言うこととやることがずれず、打ち明け話を守る。恋愛で「この人なら大丈夫」と思われる土台は、ほぼこれです。ときめきは入口を開けますが、選ばれ続けるのはここがある人です。',
+ K:'あなたの強みは<strong>気遣い</strong>です。元気のなさに気づき、言われる前に動ける。相手は「わかってもらえている」感覚を、あなたと一緒にいるだけで受け取っています。',
+ E:'あなたの強みは<strong>安定</strong>です。機嫌で振り回さず、意見が違っても落ち着いて話せる。長く付き合うほど、この価値ははっきり見えてきます。',
+ J:'あなたの強みは<strong>主張</strong>です。提案し、違う意見も伝えられる。相手は「この人には自分の考えがある」と感じます。これは、いい人止まりにならないための一番の材料です。',
+ X:'あなたの強みは<strong>特別扱い</strong>です。好意を、その人にだけ向けて、言葉にもできる。相手は「自分は特別に見られている」とはっきり受け取れます。恋愛のスイッチは、ここで入ることが多いです。',
+ V:'あなたの強みは<strong>生気</strong>です。好きなことに熱があり、自分に手をかけている。相手はあなたと一緒にいると、自分まで少し楽しくなります。人は、楽しそうな人に惹かれます。'
+};
+
+// ══ 処方（最も低い下位要素で出し分け）══
+const RX={
+ T:{label:'誠実', steps:[
+   ['返信の約束を、一つだけ確実に守る','「あとで連絡するね」を言ったら、その日のうちに返す。全部でなくてかまいません。一つ守れたことは、十の優しい言葉より信頼になります。'],
+   ['遅れそうなら、先に一言','遅刻やキャンセルそのものより、連絡のなさが不安を生みます。「10分遅れます」の一言で、評価はほとんど下がりません。'],
+   ['言ったことを、次に会ったときに覚えている','「このあいだ言ってた〇〇、どうなった？」。相手の話を覚えていることは、言動の一貫性として伝わります。']]},
+ K:{label:'気遣い', steps:[
+   ['「今日、ちょっと元気ない？」を一度だけ聞く','外れていてもかまいません。気づこうとしたことが伝わります。当たっていたら、相手は驚くほど安心します。'],
+   ['自分の話を、半分にする','盛り上げようとして話しすぎると、相手は聞き役に回ります。質問を一つ多くして、相手の話す時間を増やしてください。'],
+   ['頼まれる前に、小さく動く','飲み物を先に頼んでおく、帰り道を気にかける。大きなことより、小さく先回りする方が「この人は見てくれている」と伝わります。']]},
+ E:{label:'安定', steps:[
+   ['機嫌が悪い日は、それを言葉で先に伝える','「今日ちょっと疲れてて、そっけなかったらごめんね」。態度に出る前に言葉にすると、相手は自分のせいかと悩まずに済みます。'],
+   ['返信の間隔を、気分で変えない','早い日と遅い日の差が大きいと、相手は理由を探しはじめます。多少遅くてもいいので、一定のリズムを保ってください。'],
+   ['意見が合わないときは、一拍おく','すぐ返すより、「そっか、そう考えるんだね」を先に置く。落ち着いて見えることは、それだけで安心の材料になります。']]},
+ J:{label:'主張', steps:[
+   ['「どっちでもいい」を、一回だけやめる','「私は〇〇がいいな」と言ってみる。合わせてばかりだと、相手はあなたがどんな人なのかわからないまま終わります。'],
+   ['行きたい場所を、自分から一つ提案する','誘われるのを待つのではなく、「ここ行ってみたいんだけど」を一回。提案は、それ自体が「あなたと過ごしたい」という意思表示になります。'],
+   ['違う意見を、やわらかく一つ出す','「私はちょっと違って、〜だと思う」。同意だけの人より、自分の考えがある人の方が、恋愛の相手として意識されやすくなります。']]},
+ X:{label:'特別扱い', steps:[
+   ['その人にだけ、一つ違う接し方をする','誰にでも同じように優しいと、それは性格として受け取られます。名前を多めに呼ぶ、その人の話だけ覚えている。「あなたにだけ」の情報を、一つだけ出してください。'],
+   ['好意を、軽い言葉で一回伝える','「〇〇さんと話すの楽しい」。告白ではなく、事実として伝えるだけです。言葉にしない好意は、相手からはほぼ見えていません。'],
+   ['気持ちを隠しすぎない','ばれないように普段どおりに振る舞うほど、相手は「自分には興味がない」と読みます。少しだけ、表情や態度に出てしまうくらいがちょうどいいです。']]},
+ V:{label:'生気', steps:[
+   ['好きなことを、一つ話せるようにしておく','「最近ハマってるのは？」に、すぐ答えられるものを一つ。熱を持って話せる話題は、それだけであなたを魅力的に見せます。'],
+   ['自分のために、一つ手をかける','服、髪、姿勢、どれか一つで十分です。誰かのためではなく自分のために整えている人は、生き生きして見えます。'],
+   ['休日に、一つだけ予定を入れる','人と会わなくてもかまいません。行ってみたかった場所に行く。日々に中身がある人は、話していても楽しそうに見えます。']]}
+};
+
+// ══ 場面別の見え方 ══
+const SCENES=[
+ {name:'出会ったばかりのころ', map:{
+   HH:'早い段階で「また会いたい」と思われます。焦らなくても、相手のほうから距離を詰めてきやすい位置です。',
+   HM:'感じのいい人として好印象が残ります。一つだけ「あなたにだけ」を出すと、候補の上のほうに入ります。',
+   HL:'「いい人」という第一印象はほぼ確実に残ります。ただ、そのまま友だちの棚に入りやすいので、最初から一つだけ好意を見せておくのが効きます。',
+   MH:'印象に強く残ります。そのぶん相手は慎重になるので、約束を一つ守るだけで評価が一段上がります。',
+   MM:'悪い印象はありませんが、ほかの人と比べられると埋もれがちです。好きなことを一つ熱く話すと、記憶に残ります。',
+   ML:'穏やかな人として覚えられますが、関心の入口が開きにくい場面です。質問を一つ多くするところから始めてください。',
+   LH:'一目で気になられることが多いのに、二回目で様子を見られがちです。連絡を一定のリズムに保つだけで変わります。',
+   LM:'相手があなたの気持ちを測りかねています。好意か、そうでないか、どちらかをはっきりさせる方が関係は進みます。',
+   LL:'まだ判断材料が少なく、相手は保留しています。焦らず、同じ人と何度か会うところから始めてください。'}},
+ {name:'友だちから、一歩進むとき', map:{
+   HH:'自然に進みやすい位置です。きっかけは相手を待たず、あなたから作っても大丈夫です。',
+   HM:'関係は十分に温まっています。あとは「友だちとは違う」が伝わる一言があれば、切り替わります。',
+   HL:'いちばん難しい場面です。仲がいいほど「今さら」が働きます。接し方を一つだけ変えて、相手に「あれ？」と思わせるのが入口になります。',
+   MH:'相手は惹かれていても、踏み出すかどうか迷っています。安心の材料を一つ見せると、背中を押せます。',
+   MM:'友だちとして居心地がいいぶん、どちらも動かないまま時間が過ぎがちです。提案を一つするだけで流れが変わります。',
+   ML:'友だちとしての関係は安定していますが、恋愛の気配はまだありません。「二人で」を一回つくるところからです。',
+   LH:'友だちの時期が短いまま進みやすいぶん、急に冷めることもあります。進む前に、約束を守る姿を見せておくと長続きします。',
+   LM:'相手は、あなたが自分をどう思っているのかつかめていません。好意を軽く言葉にすると、関係が動きます。',
+   LL:'まだ友だちとしての土台づくりの段階です。無理に進めず、会う回数を増やす方が近道です。'}},
+ {name:'付き合ってから', map:{
+   HH:'安定しやすい関係になります。慣れてきたら、ときめきの材料を意識して出し続けると、長く新鮮さが保てます。',
+   HM:'穏やかで長続きしやすい関係です。ときどき、あえて自分の希望を言うと、関係に張りが出ます。',
+   HL:'大切にされる関係になりますが、「家族みたい」になるのが早い傾向があります。自分のために手をかける時間を持ち続けてください。',
+   MH:'最初は盛り上がりますが、相手は安心を求めはじめます。約束と連絡のリズムが、関係の寿命を決めます。',
+   MM:'大きな問題は起きにくいかわりに、マンネリも早く来ます。新しいことを一つ一緒にやると、関係が動きます。',
+   ML:'落ち着いた関係になりますが、相手はもう少し「好き」の表明を欲しがっているかもしれません。',
+   LH:'刺激は多いのに、相手が疲れてしまうことがあります。機嫌を言葉で先に伝えるだけで、衝突がかなり減ります。',
+   LM:'すれ違いが起きやすい位置です。連絡の頻度や会う回数について、一度だけ話し合っておくと楽になります。',
+   LL:'関係が始まっていても、お互いに探り合いが続きやすい状態です。小さな好意を、言葉にしていくところからです。'}}
+];
+
+// ══ state ══
+let cur=0, ans={};
+function show(id){document.getElementById(id).style.display='block';}
+function hide(id){document.getElementById(id).style.display='none';}
+function startQuiz(){ cur=0; ans={}; hide('topPage'); show('quizPage'); renderQ(); window.scrollTo(0,0); }
+
+function renderQ(){
+  const q=QS[cur], a=AX[q.ax];
+  const pill=document.getElementById('axisPill');
+  pill.textContent=a.name+' / '+SUB[q.sub].name; pill.style.background=a.bg; pill.style.color=a.color;
+  document.getElementById('qCnt').textContent=(cur+1)+' / '+QS.length;
+  document.getElementById('progFill').style.width=Math.round((cur/QS.length)*100)+'%';
+  document.getElementById('basisNote').textContent='参照した概念: '+q.basis;
+  document.getElementById('qText').textContent=q.q;
+  const box=document.getElementById('opts'); box.innerHTML='';
+  OPTS.forEach(function(o,i){
+    const b=document.createElement('button');
+    b.className='opt-btn'+(ans[q.id]===i+1?' selected':'');
+    b.textContent=(i+1)+'. '+o;
+    b.onclick=function(){ selectAns(i+1); };
+    box.appendChild(b);
+  });
+  document.getElementById('btnPrev').style.visibility = cur>0 ? 'visible' : 'hidden';
+}
+function selectAns(v){
+  const q=QS[cur]; ans[q.id]=v; renderQ();
+  if(cur===QS.length-1){
+    setTimeout(function(){ hide('quizPage'); show('loadingPage'); setTimeout(showResult,1600); },380);
+  } else {
+    setTimeout(function(){ cur++; renderQ(); window.scrollTo(0,0); },300);
+  }
+}
+function prevQ(){ if(cur>0){ cur--; renderQ(); window.scrollTo(0,0); } }
+
+// ══ 採点 ══
+function calcScores(a){
+  const raw={};
+  QS.forEach(function(q){ const v=a[q.id]||3; raw[q.id]= q.rev ? (6-v) : v; });
+  const aS={S:0,A:0}, aN={S:0,A:0}, sS={}, sN={};
+  Object.keys(SUB).forEach(function(k){ sS[k]=0; sN[k]=0; });
+  QS.forEach(function(q){ aS[q.ax]+=raw[q.id]; aN[q.ax]++; sS[q.sub]+=raw[q.id]; sN[q.sub]++; });
+  const pct={}, sub={};
+  ['S','A'].forEach(function(k){ pct[k]=Math.round(((aS[k]-aN[k])/(aN[k]*4))*100); });
+  Object.keys(SUB).forEach(function(k){ sub[k]=Math.round(((sS[k]-sN[k])/(sN[k]*4))*100); });
+  return {pct:pct, sub:sub};
+}
+
+function band(v){ return v>=65 ? 'H' : (v>=40 ? 'M' : 'L'); }
+function getKey(pct){ return band(pct.S)+band(pct.A); }
+
+const SUB_ORDER=['T','K','E','J','X','V'];
+function lowestSub(sub){
+  let k=SUB_ORDER[0];
+  SUB_ORDER.forEach(function(x){ if(sub[x] < sub[k]) k=x; });
+  return k;
+}
+function highestSub(sub){
+  let k=SUB_ORDER[0];
+  SUB_ORDER.forEach(function(x){ if(sub[x] > sub[k]) k=x; });
+  return k;
+}
+
+// ══ 信頼性 ══
+function calcReliability(a){
+  const vals=QS.map(function(q){ return a[q.id]||3; });
+  const same=vals.filter(function(v){ return v===vals[0]; }).length;
+  const mid=vals.filter(function(v){ return v===3; }).length;
+  const norm=QS.filter(function(q){return !q.rev;}).map(function(q){return a[q.id]||3;});
+  const revs=QS.filter(function(q){return q.rev;}).map(function(q){return a[q.id]||3;});
+  const avgN=norm.reduce(function(s,v){return s+v;},0)/norm.length;
+  const avgR=revs.reduce(function(s,v){return s+v;},0)/revs.length;
+  const contradicted = (avgN>=4.2 && avgR>=4.2) || (avgN<=1.8 && avgR<=1.8);
+  const allSameNonMid = same>=QS.length-2 && vals[0]!==3;
+  if(allSameNonMid || contradicted){
+    return {label:'要確認', color:'#E87A9A', note:'通常の設問と逆転の設問で、答えの向きが揃いすぎています。読み飛ばしがあったかもしれません。もう一度ゆっくり答えると、結果の精度が上がります。'};
+  }
+  if(mid>=12){ return {label:'参考程度', color:'#8B9BB4', note:'「どちらとも言えない」が多いため、軸の差が出にくくなっています。迷ったときは、直近3ヶ月の実際の会話を思い出して選ぶと輪郭が出ます。'}; }
+  if(mid>=7){ return {label:'中程度', color:'#4AA8E8', note:'いくつか判断に迷った項目がありますが、全体の傾向は読み取れます。'}; }
+  return {label:'高い', color:'#6FB7E8', note:'回答に一貫性があり、信頼できる結果です。'};
+}
+
+// ══ 結果描画 ══
+function showResult(){
+  hide('loadingPage'); show('resultPage');
+  const sc=calcScores(ans);
+  const key=getKey(sc.pct);
+  const t=TYPES[key];
+  let low=lowestSub(sc.sub), high=highestSub(sc.sub);
+  const flat = sc.sub[low]===sc.sub[high];
+  const rel=calcReliability(ans);
+  const r=sc.pct.S, o=sc.pct.A;
+
+  let h='';
+  h+='<div class="result-header">'
+   + '<div class="result-label">診断結果 &nbsp;|&nbsp; '+key+'-'+low+'</div>'
+   + '<div class="result-type" style="color:'+t.color+'">'+t.name+'</div>'
+   + '<div class="result-one">'+t.one+'</div>'
+   + '</div>';
+
+  h+='<div class="sec" style="border-color:rgba(232,122,154,.28)">'
+   + '<div class="sec-label">あなたのことを、相手はたぶんこう思っています</div>'
+   + '<div class="quote">'+t.guess+'</div>'
+   + '<div class="sec-body" style="margin-top:.9rem">'+t.guessWhy+'</div>'
+   + '<div class="micro">※ あなたのスコアから逆算した「そう感じられやすい」という目安です。実際に言われた言葉ではありません。</div>'
+   + '</div>';
+
+  h+='<div class="map-wrap">'
+   + '<div class="map-axis-y">↑ ときめき（恋愛の相手として意識させるか）</div>'
+   + '<div class="map">'
+   + '<div class="map-line" style="left:40%;top:0;width:1px;height:100%"></div>'
+   + '<div class="map-line" style="left:65%;top:0;width:1px;height:100%"></div>'
+   + '<div class="map-line" style="left:0;bottom:40%;width:100%;height:1px"></div>'
+   + '<div class="map-line" style="left:0;bottom:65%;width:100%;height:1px"></div>'
+   + '<div class="map-q" style="left:0;width:40%;top:0;height:35%">追いかけられるが<br>続かない人</div>'
+   + '<div class="map-q" style="left:65%;width:35%;top:0;height:35%">恋愛対象として<br>選ばれる人</div>'
+   + '<div class="map-q" style="left:40%;width:25%;top:35%;height:30%">決め手が<br>ない人</div>'
+   + '<div class="map-q" style="left:0;width:40%;bottom:0;height:40%">恋愛の入口に<br>まだ立っていない人</div>'
+   + '<div class="map-q" style="left:65%;width:35%;bottom:0;height:40%">いい人止まりに<br>なりやすい人</div>'
+   + '<div class="map-dot" style="left:'+(5+r*0.9).toFixed(1)+'%;bottom:'+(5+o*0.9).toFixed(1)+'%"></div>'
+   + '</div>'
+   + '<div class="map-axis-x">安心（一緒にいて落ち着けるか） →</div>'
+   + '<div class="micro" style="text-align:center">線は「低・中・高」の境目（40点と65点）。●が、いまのあなたの位置です。</div>'
+   + '</div>';
+
+  h+='<div class="score-grid">'
+   + '<div class="score-card"><div class="score-name">安心</div>'
+   + '<div class="score-val" style="color:#6FB7E8">'+r+'<span class="score-unit">/100</span></div>'
+   + '<div class="score-bar"><div class="score-fill" style="background:#6FB7E8;width:'+r+'%"></div></div>'
+   + '<div class="score-note">'+(r>=65?'一緒にいて大丈夫だ、という材料が十分に届いています。':r>=40?'出てはいますが、場面によってムラがあります。':'相手はまだ、あなたといて安心できるかを測っている段階です。')+'</div></div>'
+   + '<div class="score-card"><div class="score-name">ときめき</div>'
+   + '<div class="score-val" style="color:#E87A9A">'+o+'<span class="score-unit">/100</span></div>'
+   + '<div class="score-bar"><div class="score-fill" style="background:#E87A9A;width:'+o+'%"></div></div>'
+   + '<div class="score-note">'+(o>=65?'恋愛の相手として意識される材料が、はっきり出ています。':o>=40?'出てはいますが、場面によってムラがあります。':'「いい人」の先に進むための材料が、まだ外に出ていません。')+'</div></div>'
+   + '</div>';
+
+  h+='<div class="sec"><div class="sec-label">6つの内訳 — どこで落ちているか</div><div class="sub-list">';
+  SUB_ORDER.forEach(function(k){
+    const s=SUB[k], v=sc.sub[k], col=AX[s.ax].color;
+    const mark = flat ? '' : (k===low ? '<span class="sub-flag low">いちばん低い</span>' : (k===high ? '<span class="sub-flag high">いちばん高い</span>' : ''));
+    h+='<div class="sub-row">'
+     + '<div class="sub-head"><span class="sub-name"><span class="sub-ax" style="color:'+col+'">'+AX[s.ax].name+'</span>'+s.name+'</span>'
+     + '<span class="sub-val" style="color:'+col+'">'+v+'</span></div>'
+     + '<div class="sub-bar"><div class="sub-fill" style="background:'+col+';width:'+v+'%"></div></div>'
+     + '<div class="sub-desc">'+s.desc+mark+'</div>'
+     + '</div>';
+  });
+  h+='</div><div class="micro">※ この6つの内訳は、20問を意味のまとまりで分けた<strong>この診断独自の区分</strong>です。心理学で確立された下位尺度ではありません。2軸（安心・ときめき）のほうが、研究の裏づけがある部分です。</div></div>';
+
+  h+='<div class="rel-box"><div class="rel-top">'
+   + '<span class="rel-label">回答の信頼性</span>'
+   + '<span class="rel-badge" style="background:'+rel.color+'22;color:'+rel.color+'">'+rel.label+'</span>'
+   + '</div><div class="rel-note">'+rel.note+'</div></div>';
+
+  h+='<div class="sec"><div class="sec-label">こんな場面、心当たりはありませんか</div><div class="scene">';
+  t.scene.forEach(function(s){ h+='<div class="scene-row"><span class="scene-mark">●</span><span>'+s+'</span></div>'; });
+  h+='</div></div>';
+
+  h+='<div class="sec"><div class="sec-label">場面別の見え方</div><div class="step">';
+  SCENES.forEach(function(sc2){
+    h+='<div class="step-row"><div class="step-num" style="background:rgba(232,122,154,.15);color:#E87A9A">◇</div>'
+     + '<div class="step-txt"><b>'+sc2.name+'</b>'+sc2.map[key]+'</div></div>';
+  });
+  h+='</div></div>';
+
+  h+='<div class="sec"><div class="sec-label">いま効いているもの</div><div class="sec-body">'
+   + (flat ? '6つの要素がすべて同じ高さでした。突出も欠けもない状態です。まずはどれか一つを選んで伸ばすと、見え方に輪郭が出ます。' : STRENGTH[high])
+   + '</div></div>';
+
+  const rx=RX[low];
+  h+='<div class="sec" style="border-color:rgba(232,122,154,.28)"><div class="sec-label">次の一歩 — 直す場所は「'+rx.label+'」ひとつです</div>'
+   + '<div class="sec-body" style="margin-bottom:1.1rem">'+(flat?'6つとも同じ高さでしたので、まずは<strong>'+rx.label+'</strong>から動かしてみてください。':'6つのうち、いちばん出ていないのが<strong>'+rx.label+'</strong>（'+sc.sub[low]+'点）でした。')+'全部を変える必要はありません。ここだけ動かせば、2軸のスコアは連動して上がります。</div>'
+   + '<div class="step">';
+  rx.steps.forEach(function(s,i){ h+='<div class="step-row"><div class="step-num" style="background:rgba(111,183,232,.15);color:#6FB7E8">'+(i+1)+'</div><div class="step-txt"><b>'+s[0]+'</b>'+s[1]+'</div></div>'; });
+  h+='</div></div>';
+
+  h+='<div class="src"><div class="sec-label">この診断の土台</div>'
+   + '<p><strong style="color:#c8d4e6">分野：社会心理学・対人魅力</strong><br>'
+   + '2軸の枠組みは、Fletcher・Simpson らの<strong style="color:#c8d4e6">理想の相手の基準モデル（Ideal Standards Model, 1999）</strong>を参照しています。人が恋愛の相手を評価するとき、「温かさ・信頼性」と「活力・魅力」、そして「地位・資源」という3つの次元が中心になることが報告されています。この診断では、行動で変えられる前の2つを「安心」と「ときめき」として扱っています。</p>'
+   + '<p style="margin-top:.9rem">「特別扱い」の要素は、Eastwick らの<strong style="color:#c8d4e6">選択的な好意（Selective vs. Unselective Romantic Desire, 2007）</strong>の研究を参照しています。スピードデーティングの場面で、誰にでも好意を示す人よりも、特定の相手にだけ好意を示す人のほうが、相手から好意を返されやすかったという報告です。</p>'
+   + '<p style="margin-top:.9rem">個々の設問は、これらの概念を<strong style="color:#c8d4e6">参照して作成した独自項目</strong>です。既存尺度の項目をそのまま使ったものではありません。</p>'
+   + '<p style="margin-top:.9rem">結果は傾向の可視化であり、人としての魅力の評価でも、臨床的な診断でもありません。どちらの材料が相手に届いていないかを見るための目安としてお使いください。</p></div>';
+
+  h+='<button class="btn-retry" onclick="location.reload()">← もう一度やってみる</button>';
+
+  document.getElementById('resultBody').innerHTML=h;
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
